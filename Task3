@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class WordCounter {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Prompt the user to enter a text or provide a file
+        System.out.println("Enter '1' to input text, '2' to provide a file:");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        String text = "";
+
+        if (choice == 1) {
+            // Read input text from the user
+            System.out.println("Enter the text:");
+            text = scanner.nextLine();
+        } else if (choice == 2) {
+            // Read input text from the file
+            System.out.println("Enter the path of the file:");
+            String filePath = scanner.nextLine();
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                StringBuilder sb = new StringBuilder();
+
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+
+                text = sb.toString();
+            } catch (IOException e) {
+                System.err.println("Error reading the file: " + e.getMessage());
+                System.exit(1);
+            }
+        } else {
+            System.err.println("Invalid choice. Please enter '1' or '2'.");
+            System.exit(1);
+        }
+
+        // Split the string into an array of words using space or punctuation as delimiters
+        String[] words = text.split("[\\s\\p{Punct}]+");
+
+        // Initialize a counter variable to keep track of the number of words
+        int wordCount = 0;
+
+        // Iterate through the array of words and increment the counter for each word encountered
+        for (String word : words) {
+            if (!word.isEmpty()) { // Check if the word is not an empty string
+                wordCount++;
+            }
+        }
+
+        // Display the total count of words to the user
+        System.out.println("Total number of words: " + wordCount);
+    }
+}
